@@ -1,0 +1,48 @@
+{% extends '../index_master.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Registrar Gasto Extra</h1>
+    
+    <form action="{% url 'agregar_gasto' %}" method="POST">
+        {% csrf_token %}
+        
+        <!-- Selección del producto asociado al gasto extra -->
+        <div class="form-group">
+            <label for="producto">Producto (opcional)</label>
+            <select id="producto" name="producto" class="form-control">
+                <option value="">--Selecciona un producto (opcional)--</option>
+                {% for producto in productos %}
+                <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Campo para la descripción del gasto extra si no está asociado a un producto -->
+        <div class="form-group">
+            <label for="descripcion">Descripción del gasto (opcional)</label>
+            <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Descripción del gasto">
+        </div>
+        
+        <!-- Campos para cantidad y precio -->
+        <div class="form-group">
+            <label for="cantidad">Cantidad</label>
+            <input type="number" id="cantidad" name="cantidad" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="precio">Precio</label>
+            <input type="text" id="precio" name="precio" class="form-control" required>
+        </div>
+        
+        <!-- Campo para observaciones -->
+        <div class="form-group">
+            <label for="observaciones">Observaciones</label>
+            <textarea id="observaciones" name="observaciones" class="form-control"></textarea>
+        </div>
+        
+        <!-- Botón para enviar el formulario -->
+        <button type="submit" class="btn btn-primary">Registrar Gasto</button>
+    </form>
+</div>
+{% endblock %}

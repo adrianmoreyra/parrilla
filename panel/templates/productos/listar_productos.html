@@ -1,0 +1,51 @@
+{% extends '../index_master.html' %}
+
+{% block content %}
+
+    
+    
+    <h1>Inventario de productos</h1>
+    <a href="{% url 'exportar_excel' %}" class="btn btn-primary">Exportar a Excel</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio de Compra</th>
+                <th>Precio de Venta</th>
+                <th>Stock</th>
+                <th>Ganancia unidad</th>
+                <th>Ganancia total</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr class="{% if producto.stock <= 5 %}stock-bajo{% else %}stock-normal{% endif %}">
+                <td>{{ producto.nombre }}</td>
+                <td>${{ producto.precio_compra|floatformat:2 }}</td>
+                <td>${{ producto.precio_venta|floatformat:2 }}</td>
+                <td>{{ producto.stock }}</td>
+                <td>${{ producto.ganancia|floatformat:2 }}</td>
+                <td>${{ producto.ganancia_inventario|floatformat:2 }}</td>
+                <td>
+                    <a href="{% url 'editar_producto' producto.id %}">Editar</a> |
+                    <a href="{% url 'eliminar_producto' producto.id %}" onclick="return confirm('¿Estás seguro?');">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+              <th colspan="1">Total de compra/inversion:</th>
+              <th>$ {{ total_precio_compra_inv|floatformat:2 }}</th>  
+              <th></th>
+              <th></th>    
+              <th>Ganancia total inventario</th>
+              <th>$ {{ total_ganancia_inv|floatformat:2 }}</th>
+              
+              <th></th> <!-- Dejar vacío o agregar otro tipo de información si es necesario -->
+            </tr>
+          </tfoot>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends '../index_master.html' %}
+
+{% block content %}
+
+    <h1>Registrar Venta</h1>
+    
+    <form action="{% url 'registrar_venta' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group row">
+          <label for="producto" class="col-4 col-form-label">Producto</label> 
+          <div class="col-8">
+            <select id="producto" name="producto" class="form-control" required="required">
+              {% for producto in productos %}
+              <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="cantidad" class="col-4 col-form-label">Cantidad</label> 
+          <div class="col-8">
+            <input id="cantidad" name="cantidad" type="number" required="required" class="form-control">
+          </div>
+        </div>
+                <!-- Checkbox para Pagado -->
+        <div class="form-group">
+          <label for="pagado">Pagado:</label>
+          <input type="checkbox" id="pagado" name="pagado" value="1" checked>
+        </div>
+
+                
+        <!-- Campo de texto para Observaciones -->
+        <div class="form-group">
+          <label for="observaciones">Observaciones:</label>
+          <textarea class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
+        </div>
+
+        <div class="form-group row">
+          <div class="offset-4 col-8">
+            <button name="submit" type="submit" class="btn btn-primary">Registrar Venta</button>
+          </div>
+        </div>
+      </form>
+</div>
+{% endblock %}

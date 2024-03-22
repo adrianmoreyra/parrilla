@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Editar Venta</title>
+        <link rel="stylesheet" type="text/css" href="custom.css">
+ </head>
+
+
+<body>
+    <h1>Editar Venta</h1>
+    <p>Producto: {{ venta.producto.nombre }}</p>
+    <p>Cantidad: {{ venta.cantidad }}</p>
+    <p>Total Venta: ${{ venta.total_venta }}</p>
+    <p>Total Ganado: ${{ venta.ganancia_venta }}</p>
+    <p>Fecha de Venta: {{ venta.fecha_venta }}</p>
+    <p>Observaciones: {{ venta.observaciones }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">
+            {% if venta.pagado %}
+                Marcar como No Pagado
+            {% else %}
+                Marcar como Pagado
+            {% endif %}
+        </button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,64 @@
+{% extends '../index_master.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Listado de Gastos Extras</h1>
+    <a href="{% url 'exportar_excel_gastos' %}" class="btn btn-primary">Exportar a Excel</a>
+    <table class="table">
+                    <!-- Formulario de Filtro por Fecha -->
+            <form method="get">
+                Fecha Inicio: <input type="date" name="fecha_inicio">
+                Fecha Fin: <input type="date" name="fecha_fin">
+                <input type="submit" value="Filtrar">
+            </form>
+
+            
+
+            
+
+        <thead>
+            <tr>
+                <!-- Agrega la columna de fecha en el encabezado de la tabla -->
+                <th>Fecha</th>
+                <th>Producto/Descripción</th>
+                <th>Cantidad</th>
+                <th>Costo perdida</th>
+                <th>Observaciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for gasto in gastos_extras %}
+            <tr>
+                <!-- Muestra la fecha en cada fila de gasto -->
+                <td>{{ gasto.fecha|date:"d-m-Y H:i" }}
+                
+                <td>
+                  {% if gasto.producto %}
+                    {{ gasto.producto.nombre }}
+                  {% else %}
+                    {{ gasto.descripcion }}
+                  {% endif %}
+                </td>
+                <td>{{ gasto.cantidad }}</td>
+                <td>${{ gasto.precio|floatformat:2 }}
+                <td>{{ gasto.observaciones }}</td>
+                <td>
+                    <!-- Enlaces para editar o eliminar gastos -->
+                    <a href="{% url 'editar_gasto_extra' gasto.id %}">Editar</a> |
+                    <a href="{% url 'eliminar_gasto_extra' gasto.id %}" onclick="return confirm('¿Estás seguro de eliminar este gasto?');">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3">Total gastos:</th>
+                 <th>${{ total_gastos|floatformat:2 }}</th>
+                 <th colspan="2"></th>   
+            </tr>
+        </tfoot>
+
+    </table>
+</div>
+{% endblock %}

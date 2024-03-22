@@ -1,0 +1,119 @@
+{% extends '../index_master.html' %}
+{% load custom_filters %} <!-- Carga tus filtros personalizados aquí, al inicio del documento. -->
+
+
+{% block content %}
+
+
+
+     <h1>Listado de Ventas</h1>
+     <a href="{% url 'exportar_excel_ventas' %}" class="btn btn-primary">Exportar a Excel</a>
+     
+    <!-- Formulario de Filtro -->
+    <div class="filter-form" style="margin-bottom: 20px;">
+        <form method="get" class="form-inline">
+            <div class="form-group">
+                <input type="text" name="producto" placeholder="Nombre del producto" value="{{ nombre_producto|default_if_none:''}}" class="form-control" style="margin-right: 10px;">
+            </div>
+            <div class="form-group">
+                <input type="date" name="fecha_inicio" value="{{ fecha_inicio }}" class="form-control" style="margin-right: 10px;">
+                <input type="date" name="fecha_fin" value="{{ fecha_fin }}" class="form-control" style="margin-right: 10px;">
+            </div>
+            <select name="pagado" class="form-control" style="margin-right: 10px;">
+              <option value="">Todos</option>
+              <option value="1" {% if request.GET.pagado == "1" %}selected{% endif %}>Pagados</option>
+              <option value="0" {% if request.GET.pagado == "0" %}selected{% endif %}>No Pagados</option>
+              
+              
+            </select>
+            <input type="text" name="observaciones" placeholder="Buscar en observaciones" value="{{ request.GET.observaciones }}" class="form-control" style="margin-right: 15px;">  
+          
+            <button type="submit" class="btn btn-primary">Filtrar</button>  
+        </form>
+        
+    </div>
+        <!-- Dentro del Formulario de Filtro existente -->
+    
+      
+
+   
+    
+    
+    
+
+    <!-- Listado de Ventas -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Total venta</th>
+          <th>Total ganado</th>
+          <th>Fecha de Venta</th>
+          <th>Pagado</th>
+          <th>Observacion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for venta in ventas %}
+        <tr>
+          <td>{{ venta.id }}</td>
+          <td>{{ venta.producto.nombre }}</td>
+          <td>{{ venta.cantidad }}</td>
+          <td>$ {{ venta.total_venta|floatformat:2 }}</td>
+          <td>$ {{ venta.ganancia_venta|floatformat:2 }}</td>
+          <td>{{ venta.fecha_venta|date:"d/m/Y H:i" }}</td>
+          <td>
+            
+                  {% if venta.pagado %}
+                      Sí
+                  {% else %}
+                      No
+                  {% endif %}
+          
+          </td>
+        </td>
+          <td>{{ venta.observaciones }}</td>  <!-- Muestra las observaciones -->
+          <!-- Agregar enlace para editar venta -->
+          
+          <td>
+            <a href="{% url 'editar_venta' venta.id %}" class="btn btn-primary btn-sm">Editar</a>
+        </td>
+      
+        
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="2">Totales:</th>
+          <th>{{ total_cantidad }}</th>
+          <th>$ {{ total_venta|floatformat:2 }}</th>
+          <th>$ {{ total_ganado|floatformat:2 }}</th>
+          <th></th> <!-- Dejar vacío o agregar otro tipo de información si es necesario -->
+        </tr>
+      </tfoot>
+    </table>
+    
+</div>
+<div class="right_col" role="main">
+  <div style="position:absolute; top: 5px; right: 5px; background-color: #ff006f; color: white; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; width: 150px; height: 70px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000;">
+      <h3 style="font-size: 14px; margin: 0;">Tu Sueldo</h3>
+      <p style="font-size: 12px; margin: 5px 0 0;">sin contar lo fiado:</p>
+      <p style="font-size: 14px; margin: 0;">${{ porcentaje_ganancia|floatformat:2 }}</p>
+  </div>
+</div>
+<div class="right_col" role="main">
+  <div style="position: absolute; top: 5px; left: 80%; transform: translateX(-50%); background-color: hwb(212 0% 0%); color: white; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; width: 150px; height: 70px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000;">
+      <h3 style="font-size: 14px; margin: 0;">Capital del negocio</h3>
+      <p style="font-size: 12px; margin: 5px 0 0;">Dinero para invertir</p>
+      <p style="font-size: 14px; margin: 0;">${{ dinero_invertir|floatformat:2 }}</p>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
